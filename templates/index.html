@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body_class %}home{% endblock %}
+{% block content %}
+<section class="hero card">
+	<div>
+		<h1>Welcome to HomeServices</h1>
+		<p class="muted">Find and book trusted local professionals - cleaners, handypersons, and more. Fast, clear bookings with helpful support. We respect your privacy and only keep the information needed to get the job done.</p>
+		<p style="margin-top:14px">
+			<a class="button" href="{{ url_for('book_service') }}">Book a Service</a>
+			<a class="button secondary" href="{{ url_for('register') }}">Create Account</a>
+		</p>
+	</div>
+	<div style="min-width:220px; text-align:center">
+		<img src="{{ url_for('static', filename='img/illustration.png') }}" alt="home services illustration" style="max-width:160px;opacity:.95">
+	</div>
+</section>
+{% endblock %}

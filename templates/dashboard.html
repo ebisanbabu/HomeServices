@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block body_class %}dashboard{% endblock %}
+{% block content %}
+<div class="grid">
+  <div class="card">
+    <h2>Dashboard</h2>
+    <p class="muted">Welcome, <strong>{{ current_user.username }}</strong> - {{ current_user.role }}</p>
+    <p style="margin-top:8px"><a class="button" href="{{ url_for('book_service') }}">Book a Service</a> <a class="button secondary" href="{{ url_for('my_bookings') }}">My bookings</a></p>
+  </div>
+
+  <div class="card">
+    <h3>Available services</h3>
+    <ul class="muted">
+    {% for s in services %}
+      <li><strong>{{ s.name }}</strong> - {{ s.description }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Notifications</h3>
+    <ul>
+    {% for n in notifications %}
+      <li>{{ n.message }} - <small>{{ n.created_at }}</small></li>
+    {% else %}
+      <li class="muted">No notifications</li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

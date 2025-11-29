@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+{% block body_class %}worker{% endblock %}
+{% block content %}
+{% if current_user.role == 'admin' %}
+<div class="stack">
+{% else %}
+<div class="grid">
+{% endif %}
+  <div class="card">
+    <h2>Open Bookings</h2>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr><th>ID</th><th>Service</th><th>Client</th><th>Time</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for b in open_bookings %}
+          <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.service_type.name }}</td>
+            <td>Client ID: {{ b.client_id }}</td>
+            <td>{{ b.scheduled_time }}</td>
+            <td>
+              {% if current_user.role == 'worker' %}
+                {% if current_user.is_verified %}
+                  <a class="button" href="{{ url_for('claim', booking_id=b.id) }}">Claim</a>
+                  {%- set client = b.client if b.client is defined else None -%}
+                  <button type="button" class="button" data-note="{{ (b.description or '')|e }}" data-booking-id="{{ b.id }}" data-username="{{ (client.username if client else '')|e }}" aria-haspopup="dialog">Details</button>
+                {% else %}
+                  <span class="muted">(verification required to claim)</span>
+                {% endif %}
+              {% elif current_user.role == 'admin' %}
+                <form method="post" action="{{ url_for('admin_force_complete', booking_id=b.id) }}" style="display:inline">
+                  <button type="submit" class="button secondary">Force Complete</button>
+                </form>
+                <form method="post" action="{{ url_for('admin_force_cancel', booking_id=b.id) }}" style="display:inline">
+                  <button type="submit" class="button danger">Force Cancel</button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="muted">No open bookings</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if current_user.role == 'worker' %}
+  <div class="card">
+    <h2>My Claimed Jobs</h2>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr><th>ID</th><th>Service</th><th>Client</th><th>Time</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for b in my_claims %}
+          <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.service_type.name }}</td>
+            <td>Client ID: {{ b.client_id }}</td>
+            <td>{{ b.scheduled_time }}</td>
+            <td>
+              <form method="post" action="{{ url_for('complete', booking_id=b.id) }}" style="display:inline">
+                <input type="hidden" name="report_positive" value="0">
+                <button type="submit" class="button secondary">Complete</button>
+              </form>
+              {%- set client = b.client if b.client is defined else None -%}
+              {% if current_user.is_verified %}
+                <button type="button" class="button" data-note="{{ (b.description or '')|e }}" data-booking-id="{{ b.id }}" data-username="{{ (client.username if client else '')|e }}" aria-haspopup="dialog">Details</button>
+              {% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="muted">You have not claimed any jobs.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if current_user.role == 'admin' %}
+  <div class="card">
+    <h2>Accepted Bookings</h2>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr><th>ID</th><th>Service</th><th>Client</th><th>Worker</th><th>Time</th></tr></thead>
+        <tbody>
+        {% for b in accepted %}
+          <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.service_type.name }}</td>
+            <td>{{ b.client_id }}</td>
+            <td>{{ b.worker_id or '-' }}</td>
+            <td>{{ b.scheduled_time }}</td>
+            <td>
+              <form method="post" action="{{ url_for('admin_force_complete', booking_id=b.id) }}" style="display:inline">
+                <button type="submit" class="button secondary">Force Complete</button>
+              </form>
+              <form method="post" action="{{ url_for('admin_force_cancel', booking_id=b.id) }}" style="display:inline">
+                <button type="submit" class="button danger">Force Cancel</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="muted">No accepted bookings</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Completed Orders</h2>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr><th>ID</th><th>Service</th><th>Client</th><th>Worker</th><th>Completed At</th></tr></thead>
+        <tbody>
+        {% for b in completed_orders %}
+          <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.service_type.name }}</td>
+            <td>{{ b.client_id }}</td>
+            <td>{{ b.worker_id or '-' }}</td>
+            <td>{{ b.created_at }}</td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="muted">No completed orders</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() if super is defined else '' }}
+  <div id="noteModal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:9999">
+    <div style="background:#fff;padding:16px;border-radius:6px;max-width:720px;width:90%;box-shadow:0 6px 20px rgba(0,0,0,0.2);position:relative">
+      <button id="noteModalClose" aria-label="Close" style="position:absolute;right:8px;top:8px;background:transparent;border:none;font-size:18px;cursor:pointer">✕</button>
+      <h3 style="margin-top:0">Customer Notes</h3>
+      <div id="noteModalContent" style="white-space:pre-wrap;color:#111;margin-top:8px;max-height:60vh;overflow:auto"></div>
+      <div style="margin-top:12px;text-align:right"><button id="noteModalOk" class="button">Close</button></div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/notes.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body_class %}auth{% endblock %}
+{% block content %}
+<div class="card" style="max-width:520px;margin:0 auto">
+  <h2>Enter the code and choose a new password</h2>
+  <p class="muted">Enter the one-time code we sent and choose a new password.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="field">
+      <label for="{{ form.username.id }}">Username</label>
+      {{ form.username() }}
+      {% for e in form.username.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      <label for="{{ form.otp.id }}">One-time code (OTP)</label>
+      {{ form.otp() }}
+      {% for e in form.otp.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      <label for="{{ form.password.id }}">New password</label>
+      {{ form.password() }}
+      {% for e in form.password.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+    </div>
+    <div style="margin-top:8px">{{ form.submit() }}</div>
+  </form>
+</div>
+{% endblock %}

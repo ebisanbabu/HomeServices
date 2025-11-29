@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block body_class %}admin{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Audit Log</h2>
+  <form method="get" style="margin-bottom:12px">
+    <label>Actor (username): <input type="text" name="actor" value="{{ request.args.get('actor','') }}"></label>
+    <label style="margin-left:8px">Action: <input type="text" name="action" value="{{ request.args.get('action','') }}"></label>
+    <label style="margin-left:8px">Limit: <input type="number" name="limit" value="{{ request.args.get('limit',200) }}" style="width:80px"></label>
+    <button class="button" type="submit" style="margin-left:8px">Filter</button>
+    <a href="{{ url_for('admin_audit') }}" class="button secondary" style="margin-left:6px">Clear</a>
+  </form>
+
+  <div style="overflow:auto">
+    <table>
+      <thead><tr><th>ID</th><th>Actor</th><th>Action</th><th>Details</th><th>When</th></tr></thead>
+      <tbody>
+      {% for r in logs %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td>{{ r.username or ('user_id:' ~ (r.user_id or '-')) }}</td>
+          <td>{{ r.action }}</td>
+          <td style="max-width:480px;white-space:pre-wrap">{{ r.details }}</td>
+          <td>{{ r.created_at }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" class="muted">No audit entries</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

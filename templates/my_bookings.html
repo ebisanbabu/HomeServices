@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block body_class %}bookings{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>My Bookings</h2>
+  <div style="overflow:auto">
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Service</th><th>Scheduled</th><th>Status</th><th>Visit Token</th></tr>
+    </thead>
+    <tbody>
+    {% for b in bookings %}
+      <tr>
+        <td>{{ b.id }}</td>
+        <td>{{ b.service_type.name }}</td>
+        <td>{{ b.scheduled_time }}</td>
+        <td>{{ b.status }}</td>
+        <td><small>{{ b.ephemeral_visit_id }}</small></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <p class="muted" style="margin-top:10px"><small>Visit token is ephemeral and used for privacy-preserving visit mapping (deleted after retention period).</small></p>
+</div>
+{% endblock %}

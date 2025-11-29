@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block body_class %}admin{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Admin</h2>
+  <p style="margin-top:8px"><a class="button" href="{{ url_for('admin_audit') }}">View Audit Log</a></p>
+  <h3>Users</h3>
+  <ul>
+  {% for u in users %}
+    <li>
+      <strong>{{ u.username }}</strong> - role: {{ u.role }} - Verified: {{ 'Yes' if u.is_verified else 'No' }}
+      {% if u.role != 'admin' %}
+        {% if u.is_blocked %}
+          <form method="post" action="{{ url_for('admin_unblock_user', user_id=u.id) }}" style="display:inline">
+            <button type="submit" class="button secondary">Unblock</button>
+          </form>
+        {% else %}
+          <form method="post" action="{{ url_for('admin_block_user', user_id=u.id) }}" style="display:inline">
+            <button type="submit" class="button danger">Block</button>
+          </form>
+        {% endif %}
+        {% if u.role == 'worker' %}
+          {% if not u.is_verified %}
+            <form method="post" action="{{ url_for('admin_verify_user', user_id=u.id) }}" style="display:inline;margin-left:6px">
+              <button type="submit" class="button">Verify</button>
+            </form>
+          {% else %}
+            <form method="post" action="{{ url_for('admin_unverify_user', user_id=u.id) }}" style="display:inline;margin-left:6px">
+              <button type="submit" class="button secondary">Unverify</button>
+            </form>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      {% if u.uploads and u.uploads | length > 0 %}
+        <div style="margin-top:6px">Uploaded certificates:
+          <ul>
+            {% for f in u.uploads %}
+              <li><a href="{{ url_for('download_certificate', filename=f) }}">{{ f }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+  <form method="post" action="{{ url_for('cleanup') }}" style="margin-top:12px">
+    <button type="submit" class="button secondary">Run retention cleanup (delete visit mappings older than 14 days)</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,379 @@
+:root {
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --radius: 10px;
+    --shadow: 0 6px 18px rgba(23, 23, 23, 0.08);
+    --accent-home: #0ea5a4;
+    --accent-auth: #7c3aed;
+    --accent-dashboard: #10b981;
+    --accent-book: #fb923c;
+    --accent-blue: #2563eb;
+    --accent-indigo: #4f46e5;
+    --accent-admin: #dc2626;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: #0f172a;
+    line-height: 1.45
+}
+
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden
+}
+
+.skip-link:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    background: #111;
+    color: #fff;
+    border-radius: 6px;
+    z-index: 999
+}
+
+.site-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.04)
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px
+}
+
+.brand {
+    font-weight: 800;
+    color: var(--accent-home);
+    font-size: 20px;
+    text-decoration: none
+}
+
+.nav {
+    margin-left: auto
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.nav-list a {
+    color: #0f172a;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-weight: 600
+}
+
+.nav-list a:hover {
+    background: rgba(15, 23, 42, 0.04)
+}
+
+.nav-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    padding: 6px 10px;
+    border-radius: 8px
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 8px
+}
+
+.notif-link {
+    position: relative;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 18px
+}
+
+.notif-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #dc2626;
+    color: #fff;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: 700
+}
+
+.container {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 20px
+}
+
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px
+}
+
+h1,
+h2,
+h3 {
+    color: #0f172a;
+    margin: 0 0 12px
+}
+
+form .field {
+    margin-bottom: 14px
+}
+
+label {
+    display: block;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--input-color, #0f172a);
+    font-size: 15px
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(15, 23, 42, 0.35);
+    opacity: 1
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+    border-color: rgba(37, 99, 235, 0.6)
+}
+
+input[disabled],
+textarea[disabled],
+select[disabled],
+input[readonly],
+textarea[readonly] {
+    background: #f3f4f6;
+    color: var(--muted)
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-text-fill-color: var(--input-color, #0f172a) !important;
+    box-shadow: 0 0 0px 1000px #fff inset !important;
+}
+
+button,
+input[type=submit] {
+    background: var(--accent-home);
+    color: #fff;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700
+}
+
+button.secondary {
+    background: transparent;
+    color: var(--accent-home);
+    border: 1px solid rgba(15, 23, 42, 0.06)
+}
+
+.flash-area {
+    margin-bottom: 16px
+}
+
+.flash {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px
+}
+
+.flash.success {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--accent-dashboard)
+}
+
+.flash.danger {
+    background: rgba(220, 38, 38, 0.08);
+    color: var(--accent-admin)
+}
+
+.flash.warning {
+    background: rgba(250, 204, 21, 0.08);
+    color: #b45309
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent
+}
+
+table th,
+table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+    text-align: left
+}
+
+.site-footer {
+    border-top: 1px solid rgba(15, 23, 42, 0.04);
+    padding: 18px
+}
+
+.footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--muted);
+    gap: 12px
+}
+
+@media (max-width:800px) {
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        background: var(--card);
+        position: absolute;
+        right: 14px;
+        top: 60px;
+        padding: 12px;
+        border-radius: 10px;
+        box-shadow: var(--shadow)
+    }
+
+    .nav-list.open {
+        display: flex
+    }
+
+    .nav.open {
+        display: block
+    }
+
+    .nav-toggle {
+        display: inline-block;
+        margin-left: auto
+    }
+}
+
+.app-body.home .brand,
+.app-body.home button,
+.app-body.home .nav-list a {
+    color: var(--accent-home)
+}
+
+.app-body.auth .brand,
+.app-body.auth button,
+.app-body.auth .nav-list a {
+    color: var(--accent-auth)
+}
+
+.app-body.dashboard .brand,
+.app-body.dashboard button,
+.app-body.dashboard .nav-list a {
+    color: var(--accent-dashboard)
+}
+
+.app-body.book .brand,
+.app-body.book button,
+.app-body.book .nav-list a {
+    color: var(--accent-book)
+}
+
+.app-body.bookings .brand,
+.app-body.bookings button,
+.app-body.bookings .nav-list a {
+    color: var(--accent-blue)
+}
+
+.app-body.worker .brand,
+.app-body.worker button,
+.app-body.worker .nav-list a {
+    color: var(--accent-indigo)
+}
+
+.app-body.admin .brand,
+.app-body.admin button,
+.app-body.admin .nav-list a {
+    color: var(--accent-admin)
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 28px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3));
+    box-shadow: var(--shadow)
+}
+
+.muted {
+    color: var(--muted)
+}
+
+.field-error {
+    color: #b91c1c;
+    background: rgba(220, 38, 38, 0.04);
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+    font-size: 13px
+}

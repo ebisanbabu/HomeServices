@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body_class %}auth{% endblock %}
+{% block content %}
+<div class="card" style="max-width:420px;margin:0 auto">
+  <h2>Login</h2>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="field">
+      <label for="{{ form.username.id }}">Username</label>
+      {{ form.username(required='required' if form.username.flags.required else None, aria_invalid='true' if form.username.errors else None) }}
+      {% if form.username.errors %}
+        {% for e in form.username.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.password.id }}">Password</label>
+      {{ form.password(required='required' if form.password.flags.required else None, aria_invalid='true' if form.password.errors else None) }}
+      {% if form.password.errors %}
+        {% for e in form.password.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div style="margin-top:8px">{{ form.submit() }}</div>
+  </form>
+  <p class="muted" style="margin-top:12px">Forgot password? <a href="{{ url_for('reset_request') }}">Request a reset code</a></p>
+</div>
+{% endblock %}

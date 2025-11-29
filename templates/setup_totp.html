@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body_class %}auth{% endblock %}
+{% block content %}
+<div class="card" style="max-width:640px;margin:0 auto">
+  <h2>Set up TOTP (Authenticator App)</h2>
+  <p class="muted">Scan the provisioning URI in your authenticator app or enter the secret manually.</p>
+  <div style="margin:14px 0;padding:12px;border-radius:8px;background:#f8fafc">
+    <div><strong>Secret:</strong> <code>{{ secret }}</code></div>
+    <div style="margin-top:8px"><strong>Provisioning URI (for QR):</strong> <code>{{ provisioning_uri }}</code></div>
+  </div>
+  <form method="post" action="{{ url_for('enable_totp') }}">
+    <div class="field">
+      <label for="code">Enter code from your authenticator</label>
+      <input name="code" id="code" required minlength="6" maxlength="6" />
+    </div>
+    <div style="margin-top:8px"><button class="button" type="submit">Enable TOTP</button></div>
+  </form>
+  <p class="muted" style="margin-top:12px">After enabling, your account will require a code during login.</p>
+</div>
+{% endblock %}

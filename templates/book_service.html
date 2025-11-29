@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body_class %}book{% endblock %}
+{% block content %}
+<div class="card" style="max-width:700px;margin:0 auto">
+  <h2>Book Service</h2>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="field">
+      <label for="{{ form.service_type.id }}">Service</label>
+      {{ form.service_type(required='required' if form.service_type.flags.required else None, aria_invalid='true' if form.service_type.errors else None) }}
+      {% if form.service_type.errors %}
+        {% for e in form.service_type.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.scheduled_time.id }}">Preferred time</label>
+      {{ form.scheduled_time(required='required' if form.scheduled_time.flags.required else None, aria_invalid='true' if form.scheduled_time.errors else None, type='datetime-local') }}
+      {% if form.scheduled_time.errors %}
+        {% for e in form.scheduled_time.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.description.id }}">Notes</label>
+      {{ form.description(rows=4, aria_invalid='true' if form.description.errors else None) }}
+      {% if form.description.errors %}
+        {% for e in form.description.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div style="margin-top:8px">{{ form.submit() }}</div>
+  </form>
+</div>
+{% endblock %}

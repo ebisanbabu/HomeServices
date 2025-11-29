@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Home Services - Privacy First</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Book trusted local workers with privacy-first visit tokens and minimal data retention.">
+</head>
+<body class="app-body {% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{{ url_for('index') }}" class="brand">HomeServices</a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Toggle navigation">☰</button>
+      <div class="header-actions">
+        {% if current_user.is_authenticated %}
+          <a class="notif-link" href="{{ url_for('notifications') }}" aria-label="Notifications">
+            🔔
+              {% set unread = (get_unread_count() if get_unread_count is defined else 0) %}
+            {% if unread and unread > 0 %}<span class="notif-badge">{{ unread }}</span>{% endif %}
+          </a>
+        {% endif %}
+      </div>
+      <nav id="primary-navigation" class="nav" role="navigation" aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            {% if current_user.role in ['worker','admin'] %}
+              <li><a href="{{ url_for('worker_dashboard') }}">Worker</a></li>
+              {% if current_user.role == 'worker' and not (current_user.is_verified if current_user is defined else False) %}
+                <li><a href="{{ url_for('upload_certificate') }}">Upload Certificate</a></li>
+              {% endif %}
+            {% endif %}
+            {% if current_user.role == 'admin' %}<li><a href="{{ url_for('admin') }}">Admin</a></li>{% endif %}
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('register') }}">Register</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-area" role="status" aria-live="polite">
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>© {{ current_year }} HomeServices</div>
+      <div class="foot-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // small script to toggle mobile nav
+  (function(){
+    var btn = document.querySelector('.nav-toggle');
+    var nav = document.getElementById('primary-navigation');
+    if(!btn || !nav) return;
+    btn.addEventListener('click', function(){
+      var expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', String(!expanded));
+      nav.classList.toggle('open');
+    });
+  })();
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block body_class %}auth{% endblock %}
+{% block content %}
+<div class="card" style="max-width:560px;margin:0 auto">
+  <h2>Register</h2>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="field">
+      <label for="{{ form.username.id }}">Username</label>
+      {{ form.username(class_='', required='required' if form.username.flags.required else None, aria_invalid='true' if form.username.errors else None) }}
+      {% if form.username.errors %}
+        {% for e in form.username.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.email.id }}">Email</label>
+      {{ form.email(class_='', required='required' if form.email.flags.required else None, aria_invalid='true' if form.email.errors else None) }}
+      {% if form.email.errors %}
+        {% for e in form.email.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    {# phone removed - contact phone collection disabled #}
+
+    <div class="field">
+      <label for="{{ form.password.id }}">Password</label>
+      {{ form.password(class_='', minlength=10, required='required' if form.password.flags.required else None, aria_invalid='true' if form.password.errors else None) }}
+      {% if form.password.errors %}
+        {% for e in form.password.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.role.id }}">Role</label>
+      {{ form.role(class_='', required='required' if form.role.flags.required else None, aria_invalid='true' if form.role.errors else None) }}
+      {% if form.role.errors %}
+        {% for e in form.role.errors %}<div class="field-error" role="alert">{{ e }}</div>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div style="margin-top:8px">{{ form.submit(class_='') }}</div>
+  </form>
+  <p class="muted" style="margin-top:12px">Choose a strong password - at least 10 characters with numbers and symbols.</p>
+</div>
+{% endblock %}

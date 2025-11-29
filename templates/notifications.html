@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block body_class %}notifications{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Notifications</h2>
+  <form method="post" style="margin-bottom:12px">
+    <button class="button secondary" name="mark_all" value="1">Mark all read</button>
+  </form>
+  <ul>
+  {% for n in notifications %}
+    <li style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div{% if not n.read %} style="font-weight:700"{% endif %}>{{ n.message }}</div>
+          <small class="muted">{{ n.created_at }}</small>
+        </div>
+        <div>
+          {% if not n.read %}
+            <form method="post" style="display:inline">
+              <input type="hidden" name="id" value="{{ n.id }}">
+              <button class="button" type="submit">Mark read</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+{% endblock %}
