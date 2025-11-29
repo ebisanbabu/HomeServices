@@ -1,4 +1,4 @@
-# Run instructions (local dev) - Updated with security features
+# Run instructions
 
 1. Clone the project directory:
    git clone <repo> && cd home-services-app
